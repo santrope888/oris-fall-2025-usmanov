@@ -12,8 +12,6 @@ public class Product {
     private LocalDate expirationDate;
     private String manufacturer;
 
-    public Product() {}
-
     public Product(int id, String name, String category, BigDecimal price,
                    int quantity, LocalDate expirationDate, String manufacturer) {
         this.id = id;
@@ -25,8 +23,29 @@ public class Product {
         this.manufacturer = manufacturer;
     }
 
+    public boolean isValid() {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        if (category == null || category.trim().isEmpty()) {
+            return false;
+        }
+        if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+            return false;
+        }
+        if (quantity < 0) {
+            return false;
+        }
+        if (expirationDate == null || expirationDate.isBefore(LocalDate.now())) {
+            return false;
+        }
+        if (manufacturer == null || manufacturer.trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -48,9 +67,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("ID: %d, Название: %s, Категория: %s, Цена: %.2f, " +
-                        "Количество: %d, Срок годности: %s, Производитель: %s",
-                id, name, category, price, quantity,
-                expirationDate, manufacturer);
+        return String.format("ID: %d | %s | %s | %.2f руб. | %d шт. | %s | %s",
+                id, name, category, price, quantity, expirationDate, manufacturer);
     }
 }
